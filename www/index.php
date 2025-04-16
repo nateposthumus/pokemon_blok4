@@ -1,13 +1,26 @@
 <?php
 
 $breadcrumb = "Home";
-
-
+$title = "Pokémon Verzameling - Home";
 require "database_connection.php";
+
 
 $sql = "SELECT * FROM cards";
 $result = mysqli_query($conn, $sql);
 $pokemon_info = mysqli_fetch_all($result, MYSQLI_ASSOC);
+
+if(isset($_GET['type'])) {
+    $type = $_GET['type'];
+    $sql = "SELECT * FROM cards WHERE type = '$type'";
+    $result = mysqli_query($conn, $sql);
+    $pokemon_info = mysqli_fetch_all($result, MYSQLI_ASSOC);
+    $bericht = "Hier zijn alle Pokémon van het type: $type";
+} else {
+    $bericht = "Welkom bij mijn Pokémon verzameling!";
+}
+
+
+
 
 ?>
 
@@ -27,6 +40,8 @@ $pokemon_info = mysqli_fetch_all($result, MYSQLI_ASSOC);
 
 <body class="bg-gray-100">
     <?php include 'navbar.php'; ?>
+
+    <a href="/?type=vuur">Filter op fire</a>
 
     <!-- Main Content -->
     <div class="w-full">
@@ -53,7 +68,7 @@ $pokemon_info = mysqli_fetch_all($result, MYSQLI_ASSOC);
                         <div class="p-6">
                             <h3 class="mb-2 text-xl font-bold"><?php echo $pokemon["name"]; ?></h3>
                             <p class="mb-4 text-gray-600"><?php echo $pokemon["type"]; ?></p>
-                            <a href="pokemon_detail_simple.php?id=<?php echo $pokemon["id"]; ?>" class="text-blue-600 hover:text-blue-800">Meer informatie →</a>
+                            <a href="pokemon_detail.php?id=<?php echo $pokemon["id"]; ?>" class="text-blue-600 hover:text-blue-800">Meer informatie →</a>
                         </div>
                     </div>
                 <?php } ?>
